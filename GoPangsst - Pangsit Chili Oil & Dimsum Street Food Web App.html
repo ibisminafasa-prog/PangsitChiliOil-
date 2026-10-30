@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoPangsst - Sensasi Pedas Gurih Nagih!</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B0C10',
+                            card: '#12141C',
+                            red: '#FF2A4D',
+                            crimson: '#D90429',
+                            amber: '#FF9F1C',
+                            gold: '#FFC436',
+                            muted: '#2A2E3D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'neon-red': '0 0 25px rgba(255, 42, 77, 0.4)',
+                        'neon-amber': '0 0 25px rgba(255, 159, 28, 0.3)',
+                        'glow': '0 0 15px rgba(217, 4, 41, 0.25)'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0B0C10;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+        .font-display {
+            font-family: 'Outfit', sans-serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0C10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A2E3D;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF2A4D;
+        }
+        /* Glassmorphism gradient border effect */
+        .gradient-border {
+            position: relative;
+            background: linear-gradient(#12141C, #12141C) padding-box,
+                        linear-gradient(135deg, rgba(255,42,77,0.6), rgba(255,159,28,0.2), rgba(255,255,255,0.05)) border-box;
+            border: 1px solid transparent;
+        }
+        .gradient-border-active {
+            border-color: transparent;
+            background: linear-gradient(#12141C, #12141C) padding-box,
+                        linear-gradient(135deg, #FF2A4D, #FF9F1C) border-box;
+        }
+        /* Fire pulse animation */
+        @keyframes fireGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.05); }
+        }
+        .fire-glow {
+            animation: fireGlow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="selection:bg-brand-red selection:text-white antialiased">
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-brand-dark/80 backdrop-blur-md border-b border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-brand-amber flex items-center justify-center text-xl shadow-neon-red group-hover:scale-105 transition-transform duration-300">
+                    <img src="Logo.jpeg" width="40"/>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-display font-black text-2xl tracking-wider text-white flex items-center">
+                        GO<span class="text-brand-red">PANGSST</span>
+                    </span>
+                    <span class="text-[10px] text-gray-400 tracking-widest -mt-1 uppercase font-semibold">Chili Oil & Keju</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-300">
+                <a href="#home" class="hover:text-brand-red transition-colors">Beranda</a>
+                <a href="#menu" class="hover:text-brand-red transition-colors">Menu Favorit</a>
+                <a href="#spice-level" class="hover:text-brand-red transition-colors">Level Pedas</a>
+                <a href="#reviews" class="hover:text-brand-red transition-colors">Ulasan</a>
+                <a href="#location" class="hover:text-brand-red transition-colors">Outlet</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-4">
+                <!-- Cart Trigger Button -->
+                <button id="cartBtn" onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-xl bg-brand-card hover:bg-brand-muted border border-white/10 text-white transition-all flex items-center gap-2 group">
+                    <i class="fa-solid fa-fire-flame-curved text-brand-red text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="hidden sm:inline font-bold text-sm">Keranjang</span>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-brand-amber text-brand-dark font-black text-xs w-5 h-5 rounded-full flex items-center justify-center border-2 border-brand-dark">0</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden p-2 rounded-xl text-gray-300 hover:text-white hover:bg-brand-card">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-brand-card border-b border-white/10 px-4 pt-2 pb-6 space-y-3 font-medium text-sm">
+            <a href="#home" onclick="closeMobileMenu()" class="block py-2 text-gray-300 hover:text-brand-red">Beranda</a>
+            <a href="#menu" onclick="closeMobileMenu()" class="block py-2 text-gray-300 hover:text-brand-red">Menu Favorit</a>
+            <a href="#spice-level" onclick="closeMobileMenu()" class="block py-2 text-gray-300 hover:text-brand-red">Level Pedas</a>
+            <a href="#reviews" onclick="closeMobileMenu()" class="block py-2 text-gray-300 hover:text-brand-red">Ulasan</a>
+            <a href="#location" onclick="closeMobileMenu()" class="block py-2 text-gray-300 hover:text-brand-red">Outlet</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+        <!-- Background Lighting Effects -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-brand-red/20 rounded-full blur-3xl pointer-events-none fire-glow"></div>
+        <div class="absolute bottom-10 right-10 w-80 h-80 bg-brand-amber/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Column Text Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-red/10 border border-brand-red/30 text-brand-red text-xs font-bold tracking-wider uppercase">
+                        <span class="animate-ping inline-block w-2 h-2 rounded-full bg-brand-red"></span>
+                        🌶️ #1 Chili Oil Pangsit 
+                    </div>
+
+                    <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tight">
+                        Sensasi Pedas <br class="hidden sm:inline"/>
+                        <span class="bg-gradient-to-r from-brand-red via-brand-amber to-brand-gold bg-clip-text text-transparent">
+                            Gurih Nagih!
+                        </span>
+                    </h1>
+
+                    <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Pangsit ayam & keju disiram <span class="text-white font-semibold">Chili Oil Otentik</span> beraroma rempah melimpah, dipadukan dengan Daging Tebal Juicy. Siap bikin lidah kamu bergoyang!
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#menu" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-red to-brand-crimson text-white font-bold text-base shadow-neon-red hover:shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-2 group">
+                            <span>Pesan Sekarang</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#spice-level" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-card hover:bg-brand-muted border border-white/10 text-white font-semibold text-base transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-pepper-hot text-brand-amber"></i>
+                            <span>Cek Level Pedas</span>
+                        </a>
+                    </div>
+
+                    <!-- Highlights Stats -->
+                    <div class="pt-8 grid grid-cols-3 gap-4 border-t border-white/10 max-w-md mx-auto lg:mx-0">
+                        <div>
+                            <p class="font-display text-2xl font-black text-white">10k+</p>
+                            <p class="text-xs text-gray-400 font-medium">Porsi Terjual</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-2xl font-black text-brand-amber">4.9 ★</p>
+                            <p class="text-xs text-gray-400 font-medium">Rating Pelanggan</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-2xl font-black text-white">100%</p>
+                            <p class="text-xs text-gray-400 font-medium">Halal & Fresh</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column Showcase Card -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <!-- Neon Glow Ring -->
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-red to-brand-amber rounded-3xl blur-xl opacity-40 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                        
+                        <!-- Food Card Canvas -->
+                        <div class="relative gradient-border rounded-3xl p-6 bg-brand-card/90 overflow-hidden text-center">
+                            <div class="absolute top-4 right-4 bg-brand-red text-white text-xs font-black px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+                                HOT DEAL 🔥
+                            </div>
+
+                            <!-- Food Mock Image Container -->
+                            <div class="relative h-64 sm:h-72 my-4 rounded-2xl overflow-hidden bg-gradient-to-b from-brand-muted to-brand-dark flex items-center justify-center group">
+                                <img src="harga.jpeg"
+                                     alt="harga"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-brand-card via-transparent to-transparent"></div>
+                            </div>
+
+                            <div class="flex items-center justify-between mt-4 text-left">
+                                <div>
+                                    <span class="text-xs text-gray-400 block">Harga Only</span>
+                                    <span class="text-2xl font-black text-brand-amber font-display">Rp 12.000</span>
+                                </div>
+                                <button onclick="addToCart(1)" class="px-5 py-2.5 rounded-xl bg-brand-red hover:bg-brand-crimson text-white font-bold text-sm shadow-neon-red transition-all flex items-center gap-2">
+                                    <i class="fa-solid fa-plus"></i> Tambah
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SPICINESS LEVEL CUSTOMIZER WIDGET -->
+    <section id="spice-level" class="py-16 bg-gradient-to-b from-brand-dark via-brand-card/50 to-brand-dark border-y border-white/5 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Interactive Flavor Scale</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white mt-1">Pilih Level Pedas Favoritmu</h2>
+                <p class="text-gray-400 text-sm mt-2">Dibuat dari racikan cabai pilihan dan rempah segar. Pilih sesuai ketahanan lidahmu!</p>
+            </div>
+
+            <!-- Level Selector Bar -->
+            <div class="max-w-3xl mx-auto bg-brand-card p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl">
+                <!-- Level Tabs -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8" id="spiceTabs">
+                    <button onclick="setSpiceLevel(1)" id="spiceBtn-1" class="spice-tab p-4 rounded-2xl border border-white/10 bg-brand-dark text-center hover:border-brand-red/50 transition-all active-spice">
+                        <div class="text-2xl mb-1">🌶️</div>
+                        <div class="font-display font-bold text-sm text-white">Level 1</div>
+                        <div class="text-[11px] text-gray-400">Santai</div>
+                    </button>
+                    <button onclick="setSpiceLevel(2)" id="spiceBtn-2" class="spice-tab p-4 rounded-2xl border border-white/10 bg-brand-dark text-center hover:border-brand-red/50 transition-all">
+                        <div class="text-2xl mb-1">🌶️🌶️</div>
+                        <div class="font-display font-bold text-sm text-white">Level 2</div>
+                        <div class="text-[11px] text-gray-400">Nagih</div>
+                    </button>
+                    <button onclick="setSpiceLevel(3)" id="spiceBtn-3" class="spice-tab p-4 rounded-2xl border border-white/10 bg-brand-dark text-center hover:border-brand-red/50 transition-all">
+                        <div class="text-2xl mb-1">🔥🌶️🔥</div>
+                        <div class="font-display font-bold text-sm text-white">Level 3</div>
+                        <div class="text-[11px] text-gray-400">Mercon</div>
+                    </button>
+                    <button onclick="setSpiceLevel(4)" id="spiceBtn-4" class="spice-tab p-4 rounded-2xl border border-white/10 bg-brand-dark text-center hover:border-brand-red/50 transition-all">
+                        <div class="text-2xl mb-1">💥🔥💀</div>
+                        <div class="font-display font-bold text-sm text-white">Level 4</div>
+                        <div class="text-[11px] text-gray-400">Halusinasi</div>
+                    </button>
+                </div>
+
+                <!-- Active Level Info Display -->
+                <div id="spiceDisplayCard" class="p-5 rounded-2xl bg-brand-dark/80 border border-brand-red/30 flex flex-col sm:flex-row items-center gap-5">
+                    <div id="spiceIconBg" class="w-16 h-16 rounded-2xl bg-brand-amber/20 border border-brand-amber/40 flex items-center justify-center text-3xl shrink-0">
+                        🌶️
+                    </div>
+                    <div class="text-center sm:text-left flex-grow">
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <h3 id="spiceTitle" class="font-display font-extrabold text-xl text-white">Level 1 - Santai</h3>
+                            <span id="spiceBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-green-500/20 text-green-400 border border-green-500/30">Pedas Manis Light</span>
+                        </div>
+                        <p id="spiceDesc" class="text-gray-400 text-xs sm:text-sm mt-1 leading-relaxed">
+                            Cocok buat kamu yang cuma mau nikmatin gurihnya minyak cabai beraroma bawang tanpa tersiksa rasa pedas. Perfect starter!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU SECTION -->
+    <section id="menu" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <span class="text-brand-amber font-bold text-xs uppercase tracking-widest">Freshly Steamed & Fried Daily</span>
+                <h2 class="font-display text-3xl sm:text-5xl font-black text-white mt-1">Menu Favorit GoPangsst</h2>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="menuFilters">
+                <button onclick="filterMenu('all')" class="filter-btn px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-brand-red text-white shadow-neon-red" data-category="all">Semua</button>
+                <button onclick="filterMenu('Pangsit Chili Oil')" class="filter-btn px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-brand-card text-gray-400 hover:text-white border border-white/5" data-category="pangsit">Pangsit Chili Oil</button>
+                <button onclick="filterMenu('Pangsit Keju')" class="filter-btn px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-brand-card text-gray-400 hover:text-white border border-white/5" data-category="dimsum">Pangsit Keju</button>
+            </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="menuGrid">
+            <!-- Dynamic menu items inserted by JS -->
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US / HIGHLIGHTS -->
+    <section class="py-16 bg-brand-card/40 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 rounded-2xl bg-brand-card border border-white/5 hover:border-brand-red/30 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-brand-red/20 text-brand-red flex items-center justify-center text-2xl mb-4">
+                        🌶️
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Chili Oil Secret Recipe</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Minyak cabai otentik dengan campuran ebi kering, daun jeruk, dan rempah piilihan yang dimasak perlahan 6 jam.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-brand-card border border-white/5 hover:border-brand-red/30 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-brand-amber/20 text-brand-amber flex items-center justify-center text-2xl mb-4">
+                        🥟
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Daging Tebeull Juicy</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">90% olahan daging ayam segar lalu disuwir tanpa banyak tepung filler. Sekali gigit enak di mulut.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-brand-card border border-white/5 hover:border-brand-red/30 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-green-500/20 text-green-400 flex items-center justify-center text-2xl mb-4">
+                        ⚡
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-white mb-2">Selalu Fresh & Warm</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Dikukus dan digoreng mendadak saat pesanan masuk. Kualitas rasa dan kehangatan dijamin nomor satu!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS / TESTIMONIALS -->
+    <section id="reviews" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Real Customer Feedbacks</span>
+            <h2 class="font-display text-3xl sm:text-4xl font-black text-white mt-1">Kata Mereka Soal GoPangsst</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Review 1 -->
+            <div class="p-6 rounded-2xl bg-brand-card border border-white/5 flex flex-col justify-between">
+                <div>
+                    <div class="flex text-brand-amber text-sm gap-1 mb-3">
+                        ★★★★★
+                    </div>
+                    <p class="text-gray-300 text-sm italic mb-4">
+                        "Pangsit Chili Oil nya gokil banget! Chili oil-nya gurih pedas ga bikin tenggorokan gatal. Minta level 3 auto melek seharian!"
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 pt-4 border-t border-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-red/30 flex items-center justify-center font-bold text-brand-red">
+                        R
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Asri</h4>
+                        <p class="text-xs text-gray-500">Vlogger</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="p-6 rounded-2xl bg-brand-card border border-white/5 flex flex-col justify-between">
+                <div>
+                    <div class="flex text-brand-amber text-sm gap-1 mb-3">
+                        ★★★★★
+                    </div>
+                    <p class="text-gray-300 text-sm italic mb-4">
+                        "Pangsit Keju-nya parah banget enaknya! Keju mozarellanya melimpah, isian dagingnya berasa tebel banget."
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 pt-4 border-t border-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-amber/30 flex items-center justify-center font-bold text-brand-amber">
+                        S
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Risa</h4>
+                        <p class="text-xs text-gray-500">Pelanggan Setia</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="p-6 rounded-2xl bg-brand-card border border-white/5 flex flex-col justify-between">
+                <div>
+                    <div class="flex text-brand-amber text-sm gap-1 mb-3">
+                        ★★★★★
+                    </div>
+                    <p class="text-gray-300 text-sm italic mb-4">
+                        "Pengiriman kilat via WA, pesanannya nyampe masih hangat berkepul. Kemasannya rapih & chili oil dipisah jadi aman."
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 pt-4 border-t border-white/5">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/30 flex items-center justify-center font-bold text-blue-400">
+                        B
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Ilham</h4>
+                        <p class="text-xs text-gray-500">Mahasiswa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCATION & OUTLET SECTION -->
+    <section id="location" class="py-20 bg-brand-card/30 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Visit Our Outlet</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-black text-white">Pesan & Rasakan Langsung Kenikmatannya!</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Kami melayani pesanan online dan bisa langsung diantar kerumahmu.
+                    </p>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-red/20 text-brand-red flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Lokasi Outlet Main</h4>
+                                <p class="text-gray-400 text-sm">kp.Krajan Ds.Taringgul tonggoh kec.Wanayasa Kab.Purwakarta</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-amber/20 text-brand-amber flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Jam Operasional</h4>
+                                <p class="text-gray-400 text-sm">Senin - Kamis: 08:00 WIB – 19:00 WIB</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-green-500/20 text-green-400 flex items-center justify-center shrink-0 mt-1">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Kontak Direct / Pesanan Bulk</h4>
+                                <p class="text-gray-400 text-sm">+62 858-6137-2010 (WhatsApp Direct)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Outlet Photo Banner / Map Placeholder -->
+                <div class="lg:col-span-6">
+                    <div class="relative gradient-border rounded-3xl overflow-hidden p-2">
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" 
+                             alt="Outlet GoPangsst" 
+                             class="w-full h-80 object-cover rounded-2xl">
+                        <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-brand-dark/90 backdrop-blur-md border border-white/10 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-gray-400">Status Outlet Saat Ini</p>
+                                <p class="font-bold text-emerald-400 text-sm flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> BUKA SEKARANG
+                                </p>
+                            </div>
+                            <a href="https://maps.app.goo.gl/5GFoo7k3Fwe1PT1k8" target="_blank" class="px-4 py-2 rounded-lg bg-brand-red text-white font-bold text-xs hover:bg-brand-crimson transition-all">
+                                Buka Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-dark border-t border-white/10 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-red to-brand-amber flex items-center justify-center text-sm">
+                        <img src="Logo.jpeg"width="40"/>
+                    </div>
+                    <span class="font-display font-black text-xl tracking-wider text-white">
+                        GO<span class="text-brand-red">PANGSST</span>
+                    </span>
+                </div>
+
+                <p class="text-xs text-gray-500">
+                    &copy; 2026 GoPangsst Indonesia. Sensasi Pedas Gurih Nagih! All rights reserved.
+                </p>
+
+                <div class="flex items-center gap-4 text-gray-400">
+                    <a href="#" class="w-9 h-9 rounded-full bg-brand-card flex items-center justify-center hover:text-brand-red hover:bg-brand-muted transition-all">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-brand-card flex items-center justify-center hover:text-brand-red hover:bg-brand-muted transition-all">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-brand-card flex items-center justify-center hover:text-brand-red hover:bg-brand-muted transition-all">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CART DRAWER MODAL OVERLAY -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCartDrawer(false)"></div>
+
+    <!-- CART DRAWER -->
+    <div id="cartDrawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-[420px] bg-brand-card z-50 transform translate-x-full transition-transform duration-300 flex flex-col border-l border-white/10">
+        
+        <!-- Drawer Header -->
+        <div class="p-5 border-b border-white/10 flex items-center justify-between bg-brand-dark/50">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping text-brand-red text-xl"></i>
+                <h3 class="font-display font-bold text-lg text-white">Keranjang Pesanan</h3>
+            </div>
+            <button onclick="toggleCartDrawer(false)" class="p-2 text-gray-400 hover:text-white rounded-lg hover:bg-brand-muted">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List Container -->
+        <div id="cartItemsList" class="flex-grow overflow-y-auto p-5 space-y-4">
+            <!-- Dynamic Cart Items Rendered Here -->
+        </div>
+
+        <!-- Drawer Footer / Checkout Form -->
+        <div class="p-5 border-t border-white/10 bg-brand-dark/80 space-y-4">
+            <!-- Customer Notes -->
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Catatan Tambahan (opsional)</label>
+                <input type="text" id="orderNote" placeholder="Contoh: Chili oil dipisah, sendok 2 pasang" 
+                       class="w-full bg-brand-dark border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-brand-red">
+            </div>
+
+            <!-- Total Price Row -->
+            <div class="flex items-center justify-between text-white">
+                <span class="text-sm font-semibold text-gray-400">Total Pembayaran:</span>
+                <span id="cartTotalPrice" class="font-display font-black text-2xl text-brand-amber">Rp 0</span>
+            </div>
+
+            <!-- WhatsApp Checkout Button -->
+            <button onclick="checkoutWhatsApp()" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Pesan via WhatsApp Direct</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION MESSAGE -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-brand-card border border-brand-red/40 text-white px-5 py-3 rounded-2xl shadow-neon-red flex items-center gap-3">
+        <span class="text-xl">🔥</span>
+        <p id="toastMsg" class="text-xs font-bold">Item berhasil ditambahkan ke keranjang!</p>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // MENU DATA
+        const menuData = [
+            {
+                id: 1,
+                name: "Pangsit Chili Oil",
+                category: "Pangsit Chili Oil",
+                price: 12000,
+                spiceLevel: "🌶️🌶️",
+                desc: "Pangsit goreng renyah isi olahan ayam tebal, disiram chili oil spesial dan taburan bawang goreng.",
+                image: "chilioil2.jpeg",
+                isPopular: true
+            },
+            {
+                id: 2,
+                name: "Pangsit Keju",
+                category: "Pangsit Keju",
+                price: 12000,
+                spiceLevel: "🌶️🌶️🌶️",
+                desc: "Pangsit kukus lembut kenyal dengan isian ayam juicy, dibalut dengan lumer keju didalamnya.",
+                image: "pangsitkeju.jpeg",
+                isPopular: true
+            },
+            {
+                id: 3,
+                name: "Pangsit Ayam Suwir",
+                category: "Pangsit Chili Oil",
+                price: 12000,
+                spiceLevel: "🌶️",
+                desc: "Isi 4 dengan topping ayam gurih dip chili oil.",
+                image: "mentahan.jpeg",
+                isPopular: true
+            },
+        ];
+
+        // SPICINESS DATA
+        const spiceInfo = {
+            1: {
+                title: "Level 1 - Santai",
+                badge: "Pedas Manis Light",
+                desc: "Cocok buat kamu yang cuma mau nikmatin gurihnya minyak cabai beraroma bawang tanpa tersiksa rasa pedas. Perfect starter!",
+                icon: "🌶️",
+                color: "green"
+            },
+            2: {
+                title: "Level 2 - Nagih",
+                badge: "Pedas Sedang Favorit",
+                desc: "Tingkat pedas paling pas & populer! Perpaduan gurih umami dengan sengatan pedas yang bikin gak mau berhenti ngunyah.",
+                icon: "🌶️🌶️",
+                color: "amber"
+            },
+            3: {
+                title: "Level 3 - Mercon",
+                badge: "Pedas Mantap 🔥",
+                desc: "Double ekstra chili oil & cabai rawit merah halus. Siap bikin dahi berkeringat dan mulut bergetar nikmat!",
+                icon: "🔥🌶️🔥",
+                color: "red"
+            },
+            4: {
+                title: "Level 4 - Halusinasi",
+                badge: "Extremely Hot 💀",
+                desc: "Khusus petarung pedas sejati! Ekstra serbuk cabai kering dan minyak cabai pekat super membakar. Risiko ketagihan tanggung sendiri!",
+                icon: "💥🔥💀",
+                color: "crimson"
+            }
+        };
+
+        // STATE MANAGEMENT
+        let currentSpiceLevel = 1;
+        let cart = [];
+
+        // RENDER MENU
+        function renderMenu(category = 'all') {
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? menuData 
+                : menuData.filter(item => item.category === category);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "p flex flex-col justify-between bg-brand-card rounded-2xl border border-white/5 overflow-hidden hover:border-brand-red/40 transition-all duration-300 group";
+                
+                card.innerHTML = `
+                    <div>
+                        <!-- Image Container -->
+                        <div class="relative h-48 w-full overflow-hidden bg-brand-dark">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-card via-transparent to-transparent"></div>
+                            
+                            ${item.isPopular ? `
+                                <span class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider shadow">
+                                    FAVORIT 🔥
+                                </span>
+                            ` : ''}
+
+                            <span class="absolute top-3 right-3 bg-brand-dark/80 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-md border border-white/10">
+                                ${item.spiceLevel}
+                            </span>
+                        </div>
+
+                        <!-- Info Content -->
+                        <div class="p-5">
+                            <h3 class="font-display font-bold text-lg text-white group-hover:text-brand-red transition-colors">${item.name}</h3>
+                            <p class="text-gray-400 text-xs mt-2 line-clamp-2 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+
+                    <!-- Footer Action -->
+                    <div class="p-5 pt-0 flex items-center justify-between border-t border-white/5 mt-2">
+                        <div>
+                            <span class="text-[10px] text-gray-500 block">Harga</span>
+                            <span class="font-display font-extrabold text-lg text-brand-amber">Rp ${item.price.toLocaleString('id-ID')}</span>
+                        </div>
+                        <button onclick="addToCart(${item.id})" class="px-4 py-2 rounded-xl bg-brand-muted hover:bg-brand-red text-white text-xs font-bold transition-all flex items-center gap-1.5 group-hover:shadow-neon-red">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>Tambah</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // FILTER MENU BUTTONS
+        function filterMenu(cat) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.dataset.category === cat) {
+                    btn.className = "filter-btn px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-brand-red text-white shadow-neon-red";
+                } else {
+                    btn.className = "filter-btn px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-brand-card text-gray-400 hover:text-white border border-white/5";
+                }
+            });
+            renderMenu(cat);
+        }
+
+        // SPICINESS SELECTOR HANDLER
+        function setSpiceLevel(lvl) {
+            currentSpiceLevel = lvl;
+            const info = spiceInfo[lvl];
+
+            // Update Tab UI
+            document.querySelectorAll('.spice-tab').forEach((tab, index) => {
+                if(index + 1 === lvl) {
+                    tab.classList.add('border-brand-red', 'bg-brand-red/10');
+                    tab.classList.remove('border-white/10', 'bg-brand-dark');
+                } else {
+                    tab.classList.remove('border-brand-red', 'bg-brand-red/10');
+                    tab.classList.add('border-white/10', 'bg-brand-dark');
+                }
+            });
+
+            // Update Display Card
+            document.getElementById('spiceTitle').innerText = info.title;
+            document.getElementById('spiceBadge').innerText = info.badge;
+            document.getElementById('spiceDesc').innerText = info.desc;
+            document.getElementById('spiceIconBg').innerText = info.icon;
+        }
+
+        // CART LOGIC
+        function addToCart(itemId) {
+            const item = menuData.find(m => m.id === itemId);
+            if(!item) return;
+
+            const existingIndex = cart.findIndex(c => c.id === itemId && c.selectedSpice === currentSpiceLevel);
+
+            if(existingIndex > -1) {
+                cart[existingIndex].qty += 1;
+            } else {
+                cart.push({
+                    ...item,
+                    qty: 1,
+                    selectedSpice: item.category === 'drinks' ? 'Normal' : currentSpiceLevel
+                });
+            }
+
+            updateCartUI();
+            showToast(`"${item.name}" ditambahkan ke keranjang!`);
+        }
+
+        function updateCartQty(index, change) {
+            cart[index].qty += change;
+            if(cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Badge Count
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartBadge').innerText = totalCount;
+
+            // Render Cart Drawer List
+            const container = document.getElementById('cartItemsList');
+            container.innerHTML = '';
+
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-3 block text-gray-600"></i>
+                        <p class="text-sm">Keranjang kamu masih kosong.</p>
+                        <p class="text-xs mt-1 text-gray-600">Yuk pilih menu favoritmu di atas!</p>
+                    </div>
+                `;
+            } else {
+                cart.forEach((item, index) => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = "p-3 rounded-xl bg-brand-dark border border-white/5 flex items-center gap-3";
+                    itemEl.innerHTML = `
+                        <img src="${item.image}" class="w-14 h-14 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-xs text-white">${item.name}</h4>
+                            <p class="text-[10px] text-brand-amber font-semibold mt-0.5">
+                                ${item.category !== 'drinks' ? `Level Pedas: ${item.selectedSpice}` : 'Segar'}
+                            </p>
+                            <p class="text-xs font-bold text-white mt-1">Rp ${(item.price * item.qty).toLocaleString('id-ID')}</p>
+                        </div>
+                        <div class="flex items-center gap-2 bg-brand-card p-1 rounded-lg border border-white/10">
+                            <button onclick="updateCartQty(${index}, -1)" class="w-6 h-6 rounded bg-brand-muted text-white text-xs hover:bg-brand-red font-bold">-</button>
+                            <span class="text-xs font-bold text-white w-4 text-center">${item.qty}</span>
+                            <button onclick="updateCartQty(${index}, 1)" class="w-6 h-6 rounded bg-brand-muted text-white text-xs hover:bg-brand-red font-bold">+</button>
+                        </div>
+                    `;
+                    container.appendChild(itemEl);
+                });
+            }
+
+            // Calculate Total
+            const grandTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            document.getElementById('cartTotalPrice').innerText = `Rp ${grandTotal.toLocaleString('id-ID')}`;
+        }
+
+        // TOGGLE CART DRAWER
+        function toggleCartDrawer(open) {
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+
+            if(open) {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                drawer.classList.remove('translate-x-full');
+            } else {
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                drawer.classList.add('translate-x-full');
+            }
+        }
+
+        // CHECKOUT VIA WHATSAPP
+        function checkoutWhatsApp() {
+            if(cart.length === 0) {
+                alert('Keranjang kamu masih kosong!');
+                return;
+            }
+
+            const phoneNumber = "6281234567890"; // WhatsApp Business Number
+            const note = document.getElementById('orderNote').value;
+
+            let msg = "🔥 *HALO GOPANGSST! Saya Mau Pesan:* 🔥\n\n";
+            let total = 0;
+
+            cart.forEach((item, i) => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                msg += `${i+1}. *${item.name}* (${item.qty}x)\n`;
+                if(item.category !== 'drinks') {
+                    msg += `   └ Level Pedas: Level ${item.selectedSpice}\n`;
+                }
+                msg += `   └ Subtotal: Rp ${subtotal.toLocaleString('id-ID')}\n\n`;
+            });
+
+            msg += `----------------------------------\n`;
+            msg += `💰 *TOTAL PEMBAYARAN: Rp ${total.toLocaleString('id-ID')}*\n`;
+            if(note.trim() !== "") {
+                msg += `📝 *Catatan:* ${note}\n`;
+            }
+            msg += `----------------------------------\n`;
+            msg += `Mohon segera diproses ya, terima kasih! 🌶️`;
+
+            const encodedMsg = encodeURIComponent(msg);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMsg}`, '_blank');
+        }
+
+        // TOAST NOTIFICATION
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = text;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // MOBILE MENU TOGGLE
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+        }
+
+        // INITIALIZE ON LOAD
+        window.onload = function() {
+            renderMenu('all');
+            setSpiceLevel(1);
+        };
+    </script>
+</body>
+</html>
